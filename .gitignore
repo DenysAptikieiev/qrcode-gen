@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 .idea/
-electron.js
+src/assets/electron.js
 
 # testing
 /coverage
