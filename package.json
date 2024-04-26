@@ -2,7 +2,7 @@
   "name": "qrcode_gen",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://DenysAptikieiev.github.io/qrcode-gen",
+  "homepage": "https://denysaptikieiev.github.io/qrcode_gen/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
