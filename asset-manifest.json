@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/qrcode-gen/static/css/main.6399afa8.css",
+    "main.css": "/qrcode-gen/static/css/main.4b8dbb5f.css",
     "main.js": "/qrcode-gen/static/js/main.bc206efd.js",
     "static/media/logo.png": "/qrcode-gen/static/media/logo.aa378a4f263f6be1eb1c.png",
     "static/media/rules.png": "/qrcode-gen/static/media/rules.12b0ebd74e5995311302.png",
     "index.html": "/qrcode-gen/index.html",
-    "main.6399afa8.css.map": "/qrcode-gen/static/css/main.6399afa8.css.map",
+    "main.4b8dbb5f.css.map": "/qrcode-gen/static/css/main.4b8dbb5f.css.map",
     "main.bc206efd.js.map": "/qrcode-gen/static/js/main.bc206efd.js.map"
   },
   "entrypoints": [
-    "static/css/main.6399afa8.css",
+    "static/css/main.4b8dbb5f.css",
     "static/js/main.bc206efd.js"
   ]
 }
