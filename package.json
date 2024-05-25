@@ -19,7 +19,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && gh-pages -d build"
+    "deploy": "npm run build && gh-pages -d build",
+    "server": "nodemon node server/index.js"
   },
   "eslintConfig": {
     "extends": [
@@ -40,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "file-saver": "^2.0.5",
     "gh-pages": "^6.1.1",
     "moment": "^2.30.1"
   }
