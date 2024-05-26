@@ -10,6 +10,7 @@ export const FormToSticker = ({
   handleChangeProduct,
   handleChangeType,
   handleChangeFileName,
+  handleChangeSelectScaner,
   fileName,
   isOpenForm,
   km,
@@ -18,6 +19,7 @@ export const FormToSticker = ({
   type,
   date,
   barcode,
+  selectedScaner
 }) => {
   return (
     <div className={`${styles.wrapper} ${!isOpenForm ? styles.hide : ""}`}>
@@ -53,6 +55,13 @@ export const FormToSticker = ({
         </form>
         <form className={styles.formToPackages}>
           <label>
+            Выберите сканер:
+          <select onChange={handleChangeSelectScaner} value={selectedScaner}>
+            <option value={'scaner1'}>Scaner 1</option>
+            <option value={'scaner2'}>Scaner 2</option>
+          </select>
+          </label>
+          <label>
             Имя файла:
             <input type="text" onChange={handleChangeFileName} value={fileName} />
           </label>
@@ -77,7 +86,8 @@ export const FormToSticker = ({
             km={km}
             owner={owner}
             product={product}
-            type={type}            
+            type={type}
+            selectedScaner={selectedScaner}         
           />
         </form>
       </div>

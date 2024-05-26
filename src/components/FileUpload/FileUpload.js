@@ -2,13 +2,7 @@ import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
-const FileUpload = ({
-  fileName,
-  km,
-  owner,
-  product,
-  type,
-}) => {
+const FileUpload = ({ fileName, km, owner, product, type, selectedScaner }) => {
   if (!fileName) fileName = "default Name";
   if (!owner) owner = "default Owner";
   if (!product) product = "default Product";
@@ -29,25 +23,56 @@ const FileUpload = ({
       let currentPackage = "";
       const data = [];
 
-      lines.forEach((line) => {
-        if (line.startsWith("000")) {
-          currentPackage = line.trim();
-        } else if (line.startsWith("010")) {
-          const cleanedLine = line.substring(0, 32).trim();
-          const gtin = line.slice(2, 16);
-          if (cleanedLine) {
-            data.push({
-              КИ: cleanedLine,
-              "SSCC 1 (агрегат-мешок)": currentPackage,
-              "СТАТУС КМ": km,
-              ВЛАДЕЛЕЦ: owner,
-              ТОВАР: product,
-              ТИП: type,
-              "EAN(джийтин)": gtin,
-            });
+      if (selectedScaner === "scaner2") {
+        lines.forEach((line) => {
+          const parts = line.split("\t");
+          if (parts.length === 3) {
+            const content = parts[1];
+            if (content.startsWith("000")) {
+              currentPackage = content;
+            } else if (content.includes("(01)") && content.includes("(21)")) {
+              let cleanedLine = content
+                .replace("(01)", "01")
+                .replace("(21)", "21");
+              if (cleanedLine.includes("91EE")) {
+                cleanedLine = cleanedLine.split("91EE")[0].trim();
+                const gtin = cleanedLine.slice(3, 16);
+                data.push({
+                  КИ: cleanedLine,
+                  "SSCC 1 (агрегат-мешок)": currentPackage,
+                  "СТАТУС КМ": km,
+                  ВЛАДЕЛЕЦ: owner,
+                  ТОВАР: product,
+                  ТИП: type,
+                  "EAN(джийтин)": gtin,
+                });
+              }
+            }
           }
-        }
-      });
+        });
+      }
+
+      if (selectedScaner === "scaner1") {
+        lines.forEach((line) => {
+          if (line.startsWith("000")) {
+            currentPackage = line.trim();
+          } else if (line.startsWith("010")) {
+            const cleanedLine = line.substring(0, 32).trim();
+            const gtin = line.slice(3, 16);
+            if (cleanedLine) {
+              data.push({
+                КИ: cleanedLine,
+                "SSCC 1 (агрегат-мешок)": currentPackage,
+                "СТАТУС КМ": km,
+                ВЛАДЕЛЕЦ: owner,
+                ТОВАР: product,
+                ТИП: type,
+                "EAN(джийтин)": gtin,
+              });
+            }
+          }
+        });
+      }
 
       createExcelFile(data);
     };
@@ -59,13 +84,12 @@ const FileUpload = ({
     const columnWidths = {};
     const keys = Object.keys(data[0]);
 
-    keys.forEach(key => {
+    keys.forEach((key) => {
       columnWidths[key] = 10;
     });
 
-    data.forEach(item => {
-
-      keys.forEach(key => {
+    data.forEach((item) => {
+      keys.forEach((key) => {
         const itemLength = item[key].length;
         if (itemLength > columnWidths[key]) {
           columnWidths[key] = itemLength + 5;
@@ -73,7 +97,7 @@ const FileUpload = ({
       });
     });
 
-    return keys.map(key => ({ width: columnWidths[key] }));
+    return keys.map((key) => ({ width: columnWidths[key] }));
   };
 
   const createExcelFile = (data) => {
@@ -89,10 +113,10 @@ const FileUpload = ({
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    
+
     const colWidths = calculateColumnWidths(rows);
 
-    worksheet['!cols'] = colWidths;
+    worksheet["!cols"] = colWidths;
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",

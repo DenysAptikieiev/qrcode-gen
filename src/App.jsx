@@ -16,8 +16,12 @@ export default function App() {
     const [type, setType] = useState('')
     const [date, setDate] = useState('')
     const [fileName, setFileName] = useState('')
+    const [selectedScaner, setSelectedScaner] = useState('scaner1')
     const [loading, setLoading] = useState(false)
     
+    const handleChangeSelectScaner = (e) => {
+        setSelectedScaner(e.target.value);
+    };
     const handleChangeFileName = (e) => {
         setFileName(e.target.value);
     };
@@ -58,6 +62,7 @@ export default function App() {
                 handleChangeProduct={handleChangeProduct}
                 handleChangeType={handleChangeType}
                 handleChangeFileName={handleChangeFileName}
+                handleChangeSelectScaner={handleChangeSelectScaner}
                 isOpenForm={!stickerData.length}
                 fileName={fileName}
                 barcode={barcode}
@@ -66,7 +71,7 @@ export default function App() {
                 owner={owner}
                 product={product}
                 type={type}
-
+                selectedScaner={selectedScaner}
             />
 
             {loading ? <div style={{
