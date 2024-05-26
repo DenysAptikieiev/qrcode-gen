@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
-const FileUpload = ({ fileName, km, owner, product, type, selectedScaner }) => {
+const FileUpload = ({ fileName, km, owner, product, type, selectedScanner }) => {
   if (!fileName) fileName = "default Name";
   if (!owner) owner = "default Owner";
   if (!product) product = "default Product";
@@ -23,7 +23,7 @@ const FileUpload = ({ fileName, km, owner, product, type, selectedScaner }) => {
       let currentPackage = "";
       const data = [];
 
-      if (selectedScaner === "scaner2") {
+      if (selectedScanner === "scanner1") {
         lines.forEach((line) => {
           const parts = line.split("\t");
           if (parts.length === 3) {
@@ -52,7 +52,7 @@ const FileUpload = ({ fileName, km, owner, product, type, selectedScaner }) => {
         });
       }
 
-      if (selectedScaner === "scaner1") {
+      if (selectedScanner === "scanner2") {
         lines.forEach((line) => {
           if (line.startsWith("000")) {
             currentPackage = line.trim();
