@@ -1,24 +1,26 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./assets/style.css";
-
-import {FormToSticker} from "./components/FormToSticker/FormToSticker";
-import {QRCodeList} from "./components/QrCode/QRCodeList";
-import {handleFileUpload} from "./helpers/file.helper";
+import { FormToSticker } from "./components/FormToSticker/FormToSticker";
+import { QRCodeList } from "./components/QrCode/QRCodeList";
+import { handleFileUpload } from "./helpers/file.helper";
 
 export default function App() {
-
-
     const [stickerData, setStickerData] = useState([]);
-    const [barcode, setBarcode] = useState('')
-    const [km, setKm] = useState('')
-    const [owner, setOwner] = useState('')
-    const [product, setProduct] = useState('')
-    const [type, setType] = useState('')
-    const [date, setDate] = useState('')
-    const [fileName, setFileName] = useState('')
-    const [selectedScanner, setSelectedScanner] = useState('scanner1')
-    const [loading, setLoading] = useState(false)
-    
+    const [barcode, setBarcode] = useState('');
+    const [km, setKm] = useState('');
+    const [owner, setOwner] = useState('');
+    const [product, setProduct] = useState('');
+    const [type, setType] = useState('');
+    const [date, setDate] = useState('');
+    const [fileName, setFileName] = useState('');
+    const [expectedNumberOfProducts, setExpectedNumberOfProducts] = useState(16);
+    const [mismatchMessage, setMismatchMessage] = useState('');
+    const [selectedScanner, setSelectedScanner] = useState('scanner1');
+    const [loading, setLoading] = useState(false);
+
+    const handleNumberOfProductsChange = (e) => {
+        setExpectedNumberOfProducts(e.target.value);
+    };
     const handleChangeSelectScanner = (e) => {
         setSelectedScanner(e.target.value);
     };
@@ -51,7 +53,6 @@ export default function App() {
         };
     }, []);
 
-
     return (
         <div className="App">
             <FormToSticker
@@ -63,6 +64,10 @@ export default function App() {
                 handleChangeType={handleChangeType}
                 handleChangeFileName={handleChangeFileName}
                 handleChangeSelectScanner={handleChangeSelectScanner}
+                handleChangeNumberOfProductInPackage={handleNumberOfProductsChange}
+                numberOfProductInPackage={expectedNumberOfProducts}
+                setMismatchMessage={setMismatchMessage}
+                mismatchMessage={mismatchMessage}
                 isOpenForm={!stickerData.length}
                 fileName={fileName}
                 barcode={barcode}
@@ -74,17 +79,20 @@ export default function App() {
                 selectedScanner={selectedScanner}
             />
 
-            {loading ? <div style={{
-                position: 'absolute',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                zIndex: 1
-            }}>LOADING.....</div> : <QRCodeList
-                stickerData={stickerData}
-                barcode={barcode}
-                date={date}
-            />
-            }
+            {loading ? (
+                <div style={{
+                    position: 'absolute',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    zIndex: 1
+                }}>LOADING.....</div>
+            ) : (
+                <QRCodeList
+                    stickerData={stickerData}
+                    barcode={barcode}
+                    date={date}
+                />
+            )}
         </div>
     );
 }
