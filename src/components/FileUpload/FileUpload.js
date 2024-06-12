@@ -41,10 +41,9 @@ const FileUpload = ({
                     if (parts.length === 3) {
                         const content = parts[1];
                         if (content.startsWith("000")) {
-                            if (currentPackage && currentPackageCount !== numberOfProductInPackage) {
+                            if (currentPackage && +currentPackageCount !== +numberOfProductInPackage) {
                                 mismatches.push(`Package ${currentPackage} contains ${currentPackageCount} products.`);
                             }
-
                             currentPackage = content;
                             currentPackageCount = 0;
                         } else if (content.includes("(01)") && content.includes("(21)")) {
@@ -71,7 +70,7 @@ const FileUpload = ({
             if (selectedScanner === "scanner2") {
                 lines.forEach((line) => {
                     if (line.startsWith("000")) {
-                        if (currentPackage && currentPackageCount !== numberOfProductInPackage) {
+                        if (currentPackage && +currentPackageCount !== +numberOfProductInPackage) {
                             mismatches.push(`Package ${currentPackage} contains ${currentPackageCount} products.`);
                         }
 
@@ -96,7 +95,7 @@ const FileUpload = ({
                 });
             }
 
-            if (currentPackageCount !== numberOfProductInPackage) {
+            if (+currentPackageCount !== +numberOfProductInPackage) {
                 mismatches.push(`Package ${currentPackage} contains ${currentPackageCount} products.`);
             }
 
@@ -167,7 +166,8 @@ const FileUpload = ({
             {mismatchMessage && (
                 <div>
                     <h3>Mismatched Packages</h3>
-                    <pre>{mismatchMessage}</pre>
+                    <h4>Expected: {+numberOfProductInPackage} in each package</h4>
+                    <pre style={{maxHeight: '150px', overflow: 'auto'}}>{mismatchMessage}</pre>
                 </div>
             )}
         </div>
