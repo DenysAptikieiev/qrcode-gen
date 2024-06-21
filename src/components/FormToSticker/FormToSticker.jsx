@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Form.module.scss";
 import FileUpload from "../FileUpload/FileUpload";
+import {MissingProducts} from "../MissingProducts/MissingProducts";
 
 export const FormToSticker = ({
                                   handleChangeBarcode,
@@ -101,6 +102,9 @@ export const FormToSticker = ({
                         setMismatchMessage={setMismatchMessage}
                         mismatchMessage={mismatchMessage}
                     />
+                </form>
+                <form>
+                    <MissingProducts/>
                 </form>
             </div>
         </div>
