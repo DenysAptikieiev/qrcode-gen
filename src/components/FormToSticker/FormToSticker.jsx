@@ -115,15 +115,15 @@ export const FormToSticker = ({
             const validProducts = products.filter(product => firstProductNumbers.has(product));
             const invalidProducts = products.filter(product => !firstProductNumbers.has(product));
             // Финальный файл
-            validProducts.forEach(product => {
+            validProducts.forEach(prod => {
                 finalData.push({
-                    КИ: product,
+                    КИ: prod,
                     "SSCC 1 (агрегат-мешок)": box,
                     "СТАТУС КМ": km,
                     ВЛАДЕЛЕЦ: owner,
                     ТОВАР: product,
                     ТИП: type,
-                    "EAN(джийтин)": product.slice(3, 16) // Assuming EAN not provided in input, leave blank
+                    "EAN(джийтин)": prod.slice(3, 16) // Assuming EAN not provided in input, leave blank
                 });
             });
 
