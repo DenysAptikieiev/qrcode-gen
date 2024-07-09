@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
+import {saveAs} from "file-saver";
 
 const FileUpload = ({
                         fileName,
@@ -129,7 +129,7 @@ const FileUpload = ({
             });
         });
 
-        return keys.map((key) => ({ width: columnWidths[key] }));
+        return keys.map((key) => ({width: columnWidths[key]}));
     };
 
     const createExcelFile = (data) => {
@@ -153,13 +153,13 @@ const FileUpload = ({
             bookType: "xlsx",
             type: "array",
         });
-        const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+        const blob = new Blob([excelBuffer], {type: "application/octet-stream"});
         saveAs(blob, `${fileName}.xlsx`);
     };
 
     return (
         <div>
-            <input type="file" accept=".txt" onChange={handleFileChange} />
+            <input type="file" accept=".txt" onChange={handleFileChange}/>
             <button type="button" onClick={parseFile} disabled={!file}>
                 Parse and Download Excel
             </button>
