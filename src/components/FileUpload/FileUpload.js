@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import * as XLSX from "xlsx";
 import {saveAs} from "file-saver";
 
@@ -13,20 +13,60 @@ const FileUpload = ({
                         setMismatchMessage,
                         mismatchMessage
                     }) => {
+    const [acceptFilesList, setAcceptFilesList] = useState('.txt')
     if (!fileName) fileName = "default Name";
     if (!owner) owner = "default Owner";
     if (!product) product = "default Product";
     if (!type) type = "default Type";
     if (!km) km = "default Type";
 
+    useEffect(() => {
+        setAcceptFilesList(selectedScanner === 'scanner3' ? '.xlsx, .xls' : '.txt')
+    }, [selectedScanner]);
+
     const [file, setFile] = useState(null);
+
+    const readExcel = async (file) => {
+        const data = await file.arrayBuffer();
+        const workbook = XLSX.read(data);
+        return XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
+    };
+
+    const extractProductNumbers = (rows) => {
+        const data = []
+        rows.forEach(( row) => {
+            const boxNumber = row[0];
+            const productCode = row[1];
+            if (boxNumber && productCode && productCode.startsWith('010')) {
+                const cleanedCode = productCode.split('?91')[0]; // Удаление всего после '?9180C1?'
+                const gtin = productCode.slice(3, 16);
+                if (cleanedCode) {
+                    data.push({
+                        КИ: cleanedCode,
+                        "SSCC 1 (агрегат-мешок)": boxNumber,
+                        "СТАТУС КМ": km,
+                        ВЛАДЕЛЕЦ: owner,
+                        ТОВАР: product,
+                        ТИП: type,
+                        "EAN(джийтин)": gtin,
+                    });
+                }
+            }
+        });
+            return data
+    };
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
 
-    const parseFile = () => {
+    const parseFile = async () => {
         const reader = new FileReader();
+        if (selectedScanner === "scanner3") {
+            const [xlsData] = await Promise.all([readExcel(file)]);
+            const scanningData = extractProductNumbers(xlsData)
+            createExcelFile(scanningData)
+        }
         reader.onload = (e) => {
             const text = e.target.result;
             const lines = text.split("\n");
@@ -104,8 +144,7 @@ const FileUpload = ({
             } else {
                 setMismatchMessage('')
             }
-
-            createExcelFile(data);
+            if (selectedScanner !== "scanner3") createExcelFile(data);
         };
 
         reader.readAsText(file);
@@ -159,7 +198,7 @@ const FileUpload = ({
 
     return (
         <div>
-            <input type="file" accept=".txt" onChange={handleFileChange}/>
+            <input type="file" accept={acceptFilesList} onChange={handleFileChange}/>
             <button type="button" onClick={parseFile} disabled={!file}>
                 Parse and Download Excel
             </button>

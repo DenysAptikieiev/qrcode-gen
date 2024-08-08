@@ -203,6 +203,7 @@ export const FormToSticker = ({
                             <select onChange={handleChangeSelectScanner} value={selectedScanner}>
                                 <option value={'scanner1'}>Scanner 1</option>
                                 <option value={'scanner2'}>Scanner 2</option>
+                                <option value={'scanner3'}>Scanner 3</option>
                             </select>
                         </label>
                         <label>
