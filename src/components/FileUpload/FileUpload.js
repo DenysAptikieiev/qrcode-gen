@@ -19,7 +19,6 @@ const FileUpload = ({
     if (!product) product = "default Product";
     if (!type) type = "default Type";
     if (!km) km = "default Type";
-
     useEffect(() => {
         setAcceptFilesList(selectedScanner === 'scanner3' ? '.xlsx, .xls' : '.txt')
     }, [selectedScanner]);
@@ -38,7 +37,7 @@ const FileUpload = ({
             const boxNumber = row[0];
             const productCode = row[1];
             if (boxNumber && productCode && productCode.startsWith('010')) {
-                const cleanedCode = productCode.split('?91')[0]; // Удаление всего после '?9180C1?'
+                const cleanedCode = productCode.substring(0, 31); // Удаление всего после '31-го символа'
                 const gtin = productCode.slice(3, 16);
                 if (cleanedCode) {
                     data.push({
@@ -135,6 +134,10 @@ const FileUpload = ({
                 });
             }
 
+            if (selectedScanner !== "scanner3") {
+                createExcelFile(data);
+            }
+
             if (+currentPackageCount !== +numberOfProductInPackage) {
                 mismatches.push(`Package ${currentPackage} contains ${currentPackageCount} products.`);
             }
@@ -144,7 +147,6 @@ const FileUpload = ({
             } else {
                 setMismatchMessage('')
             }
-            if (selectedScanner !== "scanner3") createExcelFile(data);
         };
 
         reader.readAsText(file);
